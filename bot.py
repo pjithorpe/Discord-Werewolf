@@ -5,6 +5,7 @@ import os
 import random
 import traceback
 import sys
+import csv
 from datetime import datetime, timedelta
 from io import BytesIO, StringIO
 from config import *
@@ -3203,6 +3204,7 @@ async def end_game(reason, winners=None):
           \n{}\n\n".format('> <@'.join(sort_players(session[1])), session[4][0].seconds // 60, session[4][0].seconds % 60,
           session[4][1].seconds // 60, session[4][1].seconds % 60, (session[4][0].seconds + session[4][1].seconds) // 60,
           (session[4][0].seconds + session[4][1].seconds) % 60, reason)
+    records_msg = "\n\nRecords:\n"
     if winners or session[6] == 'crazy':
         for player in session[1]:
             # ALTERNATE WIN CONDITIONS
@@ -3217,8 +3219,53 @@ async def end_game(reason, winners=None):
             msg += "The winners are **{}** and **{}**!".format(get_name(winners[0]), get_name(winners[1]))
         else:
             msg += "The winners are **{}**, and **{}**!".format('**, **'.join(map(get_name, winners[:-1])), get_name(winners[-1]))
+        
+        # My record extension
+        records = {}
+        with open("records.csv", 'r', newline='\n', encoding='utf-8') as csv_file:
+            csv_reader = csv.reader(csv_file, delimiter=',')
+            for row in csv_reader:
+                #0 - player id
+                #1 - wins
+                #2 - total games
+                records[row[0]] = [int(row[1]), int(row[2])]
+        for player in list(session[1]):
+            found = False
+            is_winner = False
+            for winner in winners:
+                if winner == player:
+                    is_winner = True
+            for pl_rec in records.keys():
+                if pl_rec == player:
+                    found = True
+            if not found:
+                records[player] = [0,0]
+            if is_winner:
+                #increase win count by 1
+                records[player] = [records[player][0] + 1, records[player][1]]
+            #increase games count by 1
+            records[player] = [records[player][0], records[player][1] + 1]
+        records_to_sort = {}
+        for pl, rec in records.items():
+            records_to_sort[pl] = rec[0]
+        sorted_records = sorted((value,key) for (key,value) in records_to_sort.items())
+        sorted_records.reverse()
+        with open("records.csv", 'w', newline='\n', encoding='utf-8') as write_file:
+            writer = csv.writer(write_file, delimiter=',', quotechar='"', quoting=csv.QUOTE_MINIMAL)
+            if (sorted_records is not None):
+                if(len(sorted_records) > 0):
+                    p_rank = 0
+                    for s_rec in sorted_records:
+                        p_rank += 1
+                        player_id = s_rec[1]
+                        player_wins = s_rec[0]
+                        p_total_games = records[player_id][1]
+                        writer.writerow([player_id, str(player_wins), str(p_total_games)])
+                        p_win_perc = 100.0 * float(player_wins)/float(p_total_games)
+                        records_msg += str(p_rank) + '. ' + get_name(player_id) + '   (Wins: ' + str(player_wins) + ', Win %: ' + str(round(p_win_perc, 1)) + '%)\n'
     await send_lobby(msg)
     await log(1, "WINNERS: {}".format(winners))
+    await send_lobby(records_msg)
 
     players = list(session[1])
     session[3] = [datetime.now(), datetime.now()]
