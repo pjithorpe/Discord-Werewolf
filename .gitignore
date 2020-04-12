@@ -144,3 +144,8 @@ config-test.py
 
 # don't upload member ids
 records.csv
+
+# logs and mutes/notifys
+debug.txt
+notify.txt
+stasis.json
