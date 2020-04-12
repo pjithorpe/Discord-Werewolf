@@ -137,3 +137,10 @@ $RECYCLE.BIN/
 
 # Windows shortcuts
 *.lnk
+
+# config
+config.py
+config-test.py
+
+# don't upload member ids
+records.csv
