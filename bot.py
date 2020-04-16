@@ -3277,6 +3277,9 @@ async def end_game(reason, winners=None):
                     has_role = True
             if not has_role:
                 await client.add_roles(member, WEREWOLF_NOTIFY_ROLE)
+    perms = client.get_channel(GAME_CHANNEL).overwrites_for(WEREWOLF_NOTIFY_ROLE)
+    perms.send_messages = True
+    await client.edit_channel_permissions(client.get_channel(GAME_CHANNEL), client.get_server(WEREWOLF_SERVER).default_role, perms)
     # end
 
     players = list(session[1])
@@ -4230,6 +4233,9 @@ async def game_loop(ses=None):
             for role in member.roles:
                 if role.name == WEREWOLF_NOTIFY_ROLE_NAME:
                     await client.remove_roles(member, role)
+    perms = client.get_channel(GAME_CHANNEL).overwrites_for(WEREWOLF_NOTIFY_ROLE)
+    perms.send_messages = False
+    await client.edit_channel_permissions(client.get_channel(GAME_CHANNEL), client.get_server(WEREWOLF_SERVER).default_role, perms)
     # end
 
     night = 1
