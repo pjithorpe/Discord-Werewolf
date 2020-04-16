@@ -3267,6 +3267,18 @@ async def end_game(reason, winners=None):
     await log(1, "WINNERS: {}".format(winners))
     await send_lobby(records_msg)
 
+    # My death extension
+    for player in list(session[1]):
+        member = client.get_server(WEREWOLF_SERVER).get_member(player)
+        if member:
+            has_role = False
+            for role in member.roles:
+                if role.name == WEREWOLF_NOTIFY_ROLE_NAME:
+                    has_role = True
+            if not has_role:
+                await client.add_roles(member, WEREWOLF_NOTIFY_ROLE)
+    # end
+
     players = list(session[1])
     session[3] = [datetime.now(), datetime.now()]
     session[4] = [timedelta(0), timedelta(0)]
@@ -4020,6 +4032,9 @@ async def player_deaths(players_dict): # players_dict = {dead : (reason, kill_te
         member = client.get_server(WEREWOLF_SERVER).get_member(player)
         if member:
             await client.remove_roles(member, PLAYERS_ROLE)
+            # My death extension
+            await client.add_roles(member, WEREWOLF_NOTIFY_ROLE)
+            # end
         if session[0] and kill_team != "bot":
             if get_role(player, 'role') == 'wolf cub':
                 for p in session[1]:
@@ -4207,6 +4222,16 @@ async def game_loop(ses=None):
                               client.get_server(WEREWOLF_SERVER).get_member(OWNER_ID).name))
         globals()['session'] = ses
     await log(1, "Game object: ```py\n{}\n```".format(session))
+    
+    # My death extension
+    for player in list(session[1]):
+        member = client.get_server(WEREWOLF_SERVER).get_member(player)
+        if member:
+            for role in member.roles:
+                if role.name == WEREWOLF_NOTIFY_ROLE_NAME:
+                    await client.remove_roles(member, role)
+    # end
+
     night = 1
     global day_warning
     global day_timeout
