@@ -14,6 +14,8 @@ import json
 import urllib.request
 from collections import OrderedDict
 from itertools import chain
+import pandas as pd
+import scipy.special as ss
 
 ################## START INIT #####################
 client = discord.Client()
@@ -2938,7 +2940,6 @@ async def cmd_guard(message, parameters):
                     await log(1, "{0} ({1}) GUARD {2} ({3})".format(get_name(message.author.id), message.author.id, get_name(player), player))
             else:
                 await reply(message, "Could not find player " + parameters)
-                
 
 
 ######### END COMMANDS #############
@@ -3221,48 +3222,45 @@ async def end_game(reason, winners=None):
             msg += "The winners are **{}**, and **{}**!".format('**, **'.join(map(get_name, winners[:-1])), get_name(winners[-1]))
         
         # My record extension
-        records = {}
-        with open("records.csv", 'r', newline='\n', encoding='utf-8') as csv_file:
-            csv_reader = csv.reader(csv_file, delimiter=',')
-            for row in csv_reader:
-                #0 - player id
-                #1 - wins
-                #2 - total games
-                records[row[0]] = [int(row[1]), int(row[2])]
+        df = pd.read_csv(r"C:\Users\patri\Downloads\records.csv", header = None)
+        df.columns = ["Id", "Wins", "Total"]
+        df["Id"] = df["Id"].astype(str)
         for player in list(session[1]):
             found = False
             is_winner = False
             for winner in winners:
                 if winner == player:
                     is_winner = True
-            for pl_rec in records.keys():
+            for pl_rec in df["Id"]:
                 if pl_rec == player:
                     found = True
             if not found:
-                records[player] = [0,0]
+                newplayerdf = pd.DataFrame({"Id":[player], "Wins":[0], "Total":[0]})
+                df = pd.concat([df, newplayerdf])
             if is_winner:
                 #increase win count by 1
-                records[player] = [records[player][0] + 1, records[player][1]]
+                df.loc[df["Id"] == player, "Wins"] = df.loc[df["Id"] == player, "Wins"] + 1
             #increase games count by 1
-            records[player] = [records[player][0], records[player][1] + 1]
-        records_to_sort = {}
-        for pl, rec in records.items():
-            records_to_sort[pl] = rec[0]
-        sorted_records = sorted((value,key) for (key,value) in records_to_sort.items())
-        sorted_records.reverse()
-        with open("records.csv", 'w', newline='\n', encoding='utf-8') as write_file:
-            writer = csv.writer(write_file, delimiter=',', quotechar='"', quoting=csv.QUOTE_MINIMAL)
-            if (sorted_records is not None):
-                if(len(sorted_records) > 0):
-                    p_rank = 0
-                    for s_rec in sorted_records:
-                        p_rank += 1
-                        player_id = s_rec[1]
-                        player_wins = s_rec[0]
-                        p_total_games = records[player_id][1]
-                        writer.writerow([player_id, str(player_wins), str(p_total_games)])
-                        p_win_perc = 100.0 * float(player_wins)/float(p_total_games)
-                        records_msg += str(p_rank) + '. ' + get_name(player_id) + '   (Wins: ' + str(player_wins) + ', Win %: ' + str(round(p_win_perc, 1)) + '%)\n'
+            df.loc[df["Id"] == player, "Total"] = df.loc[df["Id"] == player, "Total"] + 1
+    df["Perc"] = df["Wins"] / df["Total"]
+    df = df.reset_index()
+    df = df.drop("index", axis=1)
+    #Sorting by confidence in w/l percentage
+    lowerconf = []
+    higherconf = []
+    for i in range(df.shape[0]):
+        lowerconf.append(ss.btdtri(df.loc[i, "Wins"], df.loc[i, "Total"] - df.loc[i, "Wins"], 0.025))
+        higherconf.append(ss.btdtri(df.loc[i, "Wins"], df.loc[i, "Total"] - df.loc[i, "Wins"], 0.975))
+    confdf = pd.DataFrame({"LowConf": lowerconf, "HighConf": higherconf})
+    finaldf = pd.concat([df, confdf], axis=1)
+    #Sorting and making sure the index is in order
+    finaldf = finaldf.sort_values("LowConf", ascending = False)
+    finaldf = finaldf.reset_index()
+    finaldf = finaldf.drop("index", axis = 1)
+    #Saving records
+    finaldf[["Id", "Wins", "Total"]].to_csv("records.csv", header = False, index = False)
+    for i in range(finaldf.shape[0]):
+        records_msg += str(i+1) + '. ' + get_name(str(finaldf.loc[i, "Id"])) + '   (Wins: ' + str(finaldf.loc[i, "Wins"]) + ', Win %: ' + str(round(100*finaldf.loc[i, "Perc"], 1)) + '%)\n'
     await send_lobby(msg)
     await log(1, "WINNERS: {}".format(winners))
     await send_lobby(records_msg)

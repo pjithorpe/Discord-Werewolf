@@ -149,3 +149,7 @@ records.csv
 debug.txt
 notify.txt
 stasis.json
+
+#Pycharm files
+/venv2/
+.idea/
