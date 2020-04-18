@@ -1,2 +1,4 @@
 aiohttp
-discord.py
+discord.py==0.16.12
+pandas
+scipy
