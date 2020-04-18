@@ -3221,7 +3221,7 @@ async def end_game(reason, winners=None):
         else:
             msg += "The winners are **{}**, and **{}**!".format('**, **'.join(map(get_name, winners[:-1])), get_name(winners[-1]))
         
-        # My record extension
+#EXTENSION[RECORDS]
         df = pd.read_csv(r"records.csv", header = None)
         df.columns = ["Id", "Wins", "Total"]
         df["Id"] = df["Id"].astype(str)
@@ -3260,14 +3260,22 @@ async def end_game(reason, winners=None):
     #Saving records
     finaldf[["Id", "Wins", "Total"]].to_csv("records.csv", header = False, index = False)
     for i in range(finaldf.shape[0]):
-        records_msg += str(i+1) + '. ' + get_name(str(finaldf.loc[i, "Id"])) + '   (Wins: ' \
-                       + str(finaldf.loc[i, "Wins"]) + ', Win %: ' + str(round(100*finaldf.loc[i, "Perc"], 1)) \
-                       + '%, Minimum Expected Win %: ' + str(round(100*finaldf.loc[i,"LowConf"],1)) + '%)\n'
+        rank = str(i+1)
+        player_name = get_name(str(finaldf.loc[i, "Id"]))
+        win_count = str(finaldf.loc[i, "Wins"])
+        win_percentage = str(round(100*finaldf.loc[i, "Perc"], 1))
+        min_exp_win = str(round(100*finaldf.loc[i,"LowConf"]))
+        records_msg += rank + '. ' + player_name + '    Wins: ' + win_count + ' (' + win_percentage + '%), Rating: ' + min_exp_win + '\n'
+#END
+
     await send_lobby(msg)
     await log(1, "WINNERS: {}".format(winners))
-    await send_lobby(records_msg)
 
-    # My death extension
+#EXTENSION[RECORDS]
+    await send_lobby(records_msg)
+#END
+
+#EXTENSION[DEATH]
     for player in list(session[1]):
         member = client.get_server(WEREWOLF_SERVER).get_member(player)
         if member:
@@ -3280,7 +3288,7 @@ async def end_game(reason, winners=None):
     perms = client.get_channel(GAME_CHANNEL).overwrites_for(WEREWOLF_NOTIFY_ROLE)
     perms.send_messages = True
     await client.edit_channel_permissions(client.get_channel(GAME_CHANNEL), WEREWOLF_NOTIFY_ROLE, perms)
-    # end
+#END
 
     players = list(session[1])
     session[3] = [datetime.now(), datetime.now()]
@@ -4035,9 +4043,9 @@ async def player_deaths(players_dict): # players_dict = {dead : (reason, kill_te
         member = client.get_server(WEREWOLF_SERVER).get_member(player)
         if member:
             await client.remove_roles(member, PLAYERS_ROLE)
-            # My death extension
+#EXTENSION[RECORDS]
             await client.add_roles(member, WEREWOLF_NOTIFY_ROLE)
-            # end
+#END
         if session[0] and kill_team != "bot":
             if get_role(player, 'role') == 'wolf cub':
                 for p in session[1]:
@@ -4226,7 +4234,7 @@ async def game_loop(ses=None):
         globals()['session'] = ses
     await log(1, "Game object: ```py\n{}\n```".format(session))
     
-    # My death extension
+#EXTENSION[RECORDS]
     for player in list(session[1]):
         member = client.get_server(WEREWOLF_SERVER).get_member(player)
         if member:
@@ -4236,7 +4244,7 @@ async def game_loop(ses=None):
     perms = client.get_channel(GAME_CHANNEL).overwrites_for(WEREWOLF_NOTIFY_ROLE)
     perms.send_messages = False
     await client.edit_channel_permissions(client.get_channel(GAME_CHANNEL), WEREWOLF_NOTIFY_ROLE, perms)
-    # end
+#END
 
     night = 1
     global day_warning
