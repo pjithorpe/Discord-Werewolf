@@ -3222,7 +3222,7 @@ async def end_game(reason, winners=None):
             msg += "The winners are **{}**, and **{}**!".format('**, **'.join(map(get_name, winners[:-1])), get_name(winners[-1]))
         
         # My record extension
-        df = pd.read_csv(r"C:\Users\patri\Downloads\records.csv", header = None)
+        df = pd.read_csv(r"records.csv", header = None)
         df.columns = ["Id", "Wins", "Total"]
         df["Id"] = df["Id"].astype(str)
         for player in list(session[1]):
@@ -3260,7 +3260,9 @@ async def end_game(reason, winners=None):
     #Saving records
     finaldf[["Id", "Wins", "Total"]].to_csv("records.csv", header = False, index = False)
     for i in range(finaldf.shape[0]):
-        records_msg += str(i+1) + '. ' + get_name(str(finaldf.loc[i, "Id"])) + '   (Wins: ' + str(finaldf.loc[i, "Wins"]) + ', Win %: ' + str(round(100*finaldf.loc[i, "Perc"], 1)) + '%)\n'
+        records_msg += str(i+1) + '. ' + get_name(str(finaldf.loc[i, "Id"])) + '   (Wins: ' \
+                       + str(finaldf.loc[i, "Wins"]) + ', Win %: ' + str(round(100*finaldf.loc[i, "Perc"], 1)) \
+                       + '%, Minimum Expected Win %: ' + str(round(100*finaldf.loc[i,"LowConf"],1)) + '%)\n'
     await send_lobby(msg)
     await log(1, "WINNERS: {}".format(winners))
     await send_lobby(records_msg)
