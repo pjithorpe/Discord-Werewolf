@@ -3268,13 +3268,8 @@ async def end_game(reason, winners=None):
         records_msg += rank + '. ' + player_name + '    Wins: ' + win_count + ' (' + win_percentage + '%), Rating: ' + min_exp_win + '\n'
 #END
 
-    await send_lobby(msg)
-    await log(1, "WINNERS: {}".format(winners))
-
-#EXTENSION[RECORDS]
-    await send_lobby(records_msg)
-#END
-
+#EXTENSION[RECORDS,DEATH]
+    await send_lobby(msg + "\n\n" + records_msg + "\n\n" "Reverting server roles (please do not use !join)...")
 #EXTENSION[DEATH]
     for player in list(session[1]):
         member = client.get_server(WEREWOLF_SERVER).get_member(player)
@@ -3288,7 +3283,9 @@ async def end_game(reason, winners=None):
     perms = client.get_channel(GAME_CHANNEL).overwrites_for(WEREWOLF_NOTIFY_ROLE)
     perms.send_messages = True
     await client.edit_channel_permissions(client.get_channel(GAME_CHANNEL), WEREWOLF_NOTIFY_ROLE, perms)
+    await send_lobby("...Done! You may now use !join to start a new game.")
 #END
+    await log(1, "WINNERS: {}".format(winners))
 
     players = list(session[1])
     session[3] = [datetime.now(), datetime.now()]
