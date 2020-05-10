@@ -3314,6 +3314,7 @@ async def end_game(reason, winners=None):
 
 #EXTENSION[RECORDS,DEATH]
     await send_lobby(msg + "\n\n" + records_msg + "\n\n" "Reverting server roles (please do not use !join)...")
+#END
 #EXTENSION[DEATH]
     for player in list(session[1]):
         member = client.get_server(WEREWOLF_SERVER).get_member(player)
@@ -4084,7 +4085,7 @@ async def player_deaths(players_dict): # players_dict = {dead : (reason, kill_te
         member = client.get_server(WEREWOLF_SERVER).get_member(player)
         if member:
             await client.remove_roles(member, PLAYERS_ROLE)
-#EXTENSION[RECORDS]
+#EXTENSION[DEATH]
             await client.add_roles(member, WEREWOLF_NOTIFY_ROLE)
 #END
         if session[0] and kill_team != "bot":
@@ -4275,7 +4276,7 @@ async def game_loop(ses=None):
         globals()['session'] = ses
     await log(1, "Game object: ```py\n{}\n```".format(session))
     
-#EXTENSION[RECORDS]
+#EXTENSION[DEATH]
     for player in list(session[1]):
         member = client.get_server(WEREWOLF_SERVER).get_member(player)
         if member:
