@@ -5404,9 +5404,6 @@ async def game_loop(ses=None):
                                         lynched_msg += random.choice(lang['lynchednoreveal']).format(get_name(lynched_player))
                                     else:
 #EXTENSION[LYNCHING]
-                                        await log(2, "Lynched player: " + lynched_player + " " + get_name(lynched_player))
-                                        for key in lang['custom_lynches'].keys():
-                                            await log(2, "Keys: " + key)
                                         if lynched_player in lang['custom_lynches'].keys():
                                             lynched_msg += random.choice(lang['custom_lynches'][lynched_player]).format(get_name(lynched_player), get_role(lynched_player, 'death'))
                                         else:
