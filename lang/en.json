@@ -62,7 +62,10 @@
 		"The villagers force **{0}** to play Russian Roulette. The town square is stained with the remains of the **{1}**.",
 		"The villagers, after much debate, finally decide on lynching **{0}**, who turned out to be... a **{1}**.",
 		"After a prolonged struggle, **{0}** is forced to the gallows, and is discovered after death to be a **{1}**.",
-		"The villagers choose to hang **{0}**; however, the rope stretches and breaks, and the ensuing fall kills the **{1}**."
+		"The villagers choose to hang **{0}**; however, the rope stretches and breaks, and the ensuing fall kills the **{1}**.",
+		"The villagers have agreed to lynch **{0}**, who was a humble English **{1}**.",
+		"The filthy peasants have agreed to murder their friendly neighbourhood **{1}**, **{0}**.",
+		"The villagers have voted to take turns re-enacting Owen Farrell's no-arms tackle technique on **{0}**. After multiple powerful blows to the head, he dies, revealing himself to be a **{1}**."
 	],
 	"lynchednoreveal": [
 		"The villagers have agreed to lynch **{0}**.",
@@ -76,6 +79,48 @@
 		"After a prolonged struggle, **{0}** is forced to the gallows.",
 		"The villagers choose to hang **{0}**; however, the rope stretches and breaks, and the ensuing fall kills them instead."
 	],
+	"custom_lynches": {
+		"118887220235993088": [
+			"The peasants have forced **{0}** to rewrite the code for Weirwolf. After several hours of tedious coding, **{0}**, a **{1}** has been found dead after losing the will to live.",
+			"The village has voted to deal out the same punishment to **{0}** as Tiger's legend Manu Tuilagi dealt to Chris Ashton in the past. After several punches, **{0}** is brutalised to death revealing that he was a **{1}**.",
+			"The mob has voted to make **{0}** Leicester Head Coach. This is surely a sentence worse than death! His CV mentions that he was indeed a **{1}**.",
+			"The village has voted that **{0}** reliquish his role as moderator of r/sports and take on a more demanding position moderating r/incels and r/semenretention. Hours later, this **{1}** is found dead in mysterious circumstances!",
+			"The villagers have developed a great sense of irony after voting to lynch **{0}** by forcing him to wear a Saracens jersey and throwing him to an ambush of tigers. After several minutes, it's obvious that he was a **{1}**."
+		],
+		"276463944779169793": [
+			"The bastard english have ganged up on **{0}**, a noble Irish **{1}**.",
+			"Everyone decided to murder the most handsome **{1}** in the village, **{0}**.",
+			"The villagers have decided to copy Tana Umaga's infamous Lions-Tour-ending tackle on BOD, on **{0}**. After their first attempt, his neck is broken revealing him to be a **{1}**.",
+			"The angry mob has elected to drag **{0}**, a **{1}**, to TK Maxx where he is savagely murdered using affordable and designer brands of cooking knives.",
+			"The peasants have chopped up **{0}** and sold this **{1}** to Tesco as beef for their burger range."
+		],
+		"347745786030718978": [
+			"**{0}** emits one final \"HONK!\", before the rope snaps his neck. He was a **{1}**.",
+			"The villagers have developed a taste for **{0}**. He's torn limb from limb, and roasted over a big fire. Nobody seems to care that he was a **{1}**.",
+			"Before the villagers can grab **{0}**, he is a revealed to be not just a **{1}** but actually a goose in **{1}** clothing!. He attempts to fly away but in a cruel twist of fate hits into a wind turbine, dying instantly.",
+			"The populace have decided to kill **{0}**. Not only is he discovered to be a **{1}** after death, but also to have been co-owner of several shell companies with Nigel Wray.",
+			"The noose is placed around **{0}**'s neck and the trap door opens, killing the **{1}** instantly. Further inspection of the body clarifies that the mods are indeed Nazis.",
+			"The irate crowd has forced **{0}** to audit Saracens' accounts for the previous 20 seasons. This is surely worse than death for the **{1}**, who is forced to leave the village!"
+		],
+		"218102736246407169": [
+			"The capitalist pigs finally caught comrade **{0}**, a **{1}**.",
+			"Dan Biggar waves his arms in the air and cries out in protest, but he couldn't stop the villagers from lynching **{0}**, a **{1}**"
+		],
+		"207225329578672128": [
+			"As the noose is placed around **{1}** **{0}**'s neck, he mutters something to himself that sounds like \"*...Nuremberg all over again...*\".",
+			"The villagers have forced **{0}** to leave the village to join the Brexit Party and organise all their future marches. His new membership card reveals him to have been a **{1}**.",
+			"The mob has beaten **{0}** into a coma and sent him off to the IRFU's Exiles Irish Qualified Development Programme. Surely for this staunch Englishman and **{1}**, this is a fate worse than death.",
+			"The villagers attempt to lynch **{0}**, but before they can pin down the **{1}**, he gets poached by Bath and leaves forever."
+		],
+		"604276140806373427": [
+			"Driven by a dangerous wave of racial and ethnic tension, the villagers have lynched **{0}**, who was a **{1}**.",
+			"The mob has decided that **{0}** should watch every single ASM final loss. Several hours later, this **{1}** has been found dead with a broken heart.",
+			"The villagers have voted to guillotine **{0}**. After he's beheaded, a quick inspection of the body reveals that the **{1}** did indeed have chlamydia.",		
+			"Les peasants electent mortir les meilleur personne Francais **{0}**. Il etait un **{1}**.",
+			"The angry crowd has forced **{0}** to change his disseration topic to 'References and Accounts of Chlamydia in Medieval France'. This **{1}** might as well be considered dead!",
+			"As the villagers are about to slit **{1}** **{0}**'s throat, Aurelien Rougerie appears out of nowhere and expertly convinces the crowd to let him personally carry out the execution by snoo snoo!"
+		]
+	},
 	"hastotem": [
 		"**{0}** is in possession of a mysterious totem..."
 	],

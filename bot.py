@@ -5359,7 +5359,15 @@ async def game_loop(ses=None):
                                 if session[6] == 'noreveal':
                                     lynched_msg += random.choice(lang['lynchednoreveal']).format(get_name(lynched_player))
                                 else:
-                                    lynched_msg += random.choice(lang['lynched']).format(get_name(lynched_player), get_role(lynched_player, 'death'))
+#EXTENSION[LYNCHING]
+                                    await log(2, "Lynched player: " + lynched_player + " " + get_name(lynched_player))
+                                    for key in lang['custom_lynches'].keys():
+                                        await log(2, "Keys: " + key)
+                                    if lynched_player in lang['custom_lynches'].keys():
+                                        lynched_msg += random.choice(lang['custom_lynches'][lynched_player]).format(get_name(lynched_player), get_role(lynched_player, 'death'))
+                                    else:
+                                        lynched_msg += random.choice(lang['lynched']).format(get_name(lynched_player), get_role(lynched_player, 'death'))
+#END
                                 if get_role(lynched_player, 'role') == 'jester':
                                     session[1][lynched_player][4].append('lynched')
                                 lynchers_team = [get_role(x, 'actualteam') for x in session[1] if session[1][x][0] and session[1][x][2] == lynched_player]
