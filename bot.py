@@ -3308,7 +3308,7 @@ async def end_game(reason, winners=None):
         player_name = get_name(str(finaldf.loc[i, "Id"]))
         win_count = str(finaldf.loc[i, "Wins"])
         win_percentage = str(round(100*finaldf.loc[i, "Perc"], 1))
-        min_exp_win = str(round(100*finaldf.loc[i,"LowConf"]))
+        min_exp_win = str(int(100*finaldf.loc[i,"LowConf"]))
         records_msg += rank + '. ' + player_name + '    Wins: ' + win_count + ' (' + win_percentage + '%), Rating: ' + min_exp_win + '\n'
 #END
 
