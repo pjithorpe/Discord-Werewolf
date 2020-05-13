@@ -3325,40 +3325,40 @@ async def end_game(reason, winners=None):
                 df.loc[df["Id"] == player, "Wins"] = df.loc[df["Id"] == player, "Wins"] + 1
             #increase games count by 1
             df.loc[df["Id"] == player, "Total"] = df.loc[df["Id"] == player, "Total"] + 1
-    df["Perc"] = df["Wins"] / df["Total"]
-    df = df.reset_index()
-    df = df.drop("index", axis=1)
-    #Sorting by confidence in w/l percentage
-    lowerconf = []
-    higherconf = []
-    for i in range(df.shape[0]):
-        lowerconf.append(ss.btdtri(df.loc[i, "Wins"], df.loc[i, "Total"] - df.loc[i, "Wins"], 0.025))
-        higherconf.append(ss.btdtri(df.loc[i, "Wins"], df.loc[i, "Total"] - df.loc[i, "Wins"], 0.975))
-    confdf = pd.DataFrame({"LowConf": lowerconf, "HighConf": higherconf})
-    finaldf = pd.concat([df, confdf], axis=1)
-    #Sorting and making sure the index is in order
-    finaldf = finaldf.sort_values("LowConf", ascending = False)
-    finaldf = finaldf.reset_index()
-    finaldf = finaldf.drop("index", axis = 1)
-    #Saving records
-    finaldf[["Id", "Wins", "Total"]].to_csv("records.csv", header = False, index = False)
-    for i in range(finaldf.shape[0]):
-        rank = str(i+1)
-        player_name = get_name(str(finaldf.loc[i, "Id"]))
-        win_count = str(finaldf.loc[i, "Wins"])
-        try:
-            win_percentage = str(round(100*finaldf.loc[i, "Perc"], 1))
-        except:
-            win_percentage = "ERROR"
-        try:
-            min_exp_win = str(int(100*finaldf.loc[i,"LowConf"]))
-        except:
-            min_exp_win = "ERROR"
-        records_msg += rank + '. ' + player_name + '    Wins: ' + win_count + ' (' + win_percentage + '%), Rating: ' + min_exp_win + '\n'
+        df["Perc"] = df["Wins"] / df["Total"]
+        df = df.reset_index()
+        df = df.drop("index", axis=1)
+        #Sorting by confidence in w/l percentage
+        lowerconf = []
+        higherconf = []
+        for i in range(df.shape[0]):
+            lowerconf.append(ss.btdtri(df.loc[i, "Wins"], df.loc[i, "Total"] - df.loc[i, "Wins"], 0.025))
+            higherconf.append(ss.btdtri(df.loc[i, "Wins"], df.loc[i, "Total"] - df.loc[i, "Wins"], 0.975))
+        confdf = pd.DataFrame({"LowConf": lowerconf, "HighConf": higherconf})
+        finaldf = pd.concat([df, confdf], axis=1)
+        #Sorting and making sure the index is in order
+        finaldf = finaldf.sort_values("LowConf", ascending = False)
+        finaldf = finaldf.reset_index()
+        finaldf = finaldf.drop("index", axis = 1)
+        #Saving records
+        finaldf[["Id", "Wins", "Total"]].to_csv("records.csv", header = False, index = False)
+        for i in range(finaldf.shape[0]):
+            rank = str(i+1)
+            player_name = get_name(str(finaldf.loc[i, "Id"]))
+            win_count = str(finaldf.loc[i, "Wins"])
+            try:
+                win_percentage = str(round(100*finaldf.loc[i, "Perc"], 1))
+            except:
+                win_percentage = "ERROR"
+            try:
+                min_exp_win = str(int(100*finaldf.loc[i,"LowConf"]))
+            except:
+                min_exp_win = "ERROR"
+            records_msg += rank + '. ' + player_name + '    Wins: ' + win_count + ' (' + win_percentage + '%), Rating: ' + min_exp_win + '\n'
 #END
 
 #EXTENSION[RECORDS,DEATH]
-    await send_lobby(msg + "\n\n" + records_msg + "\n\n" "Reverting server roles (please do not use !join)...")
+        await send_lobby(msg + "\n\n" + records_msg + "\n\n" "Reverting server roles (please do not use !join)...")
 #END
 #EXTENSION[DEATH]
     for player in list(session[1]):
@@ -3373,7 +3373,6 @@ async def end_game(reason, winners=None):
     perms = client.get_channel(GAME_CHANNEL).overwrites_for(WEREWOLF_NOTIFY_ROLE)
     perms.send_messages = True
     await client.edit_channel_permissions(client.get_channel(GAME_CHANNEL), WEREWOLF_NOTIFY_ROLE, perms)
-    await send_lobby("...Done! You may now use !join to start a new game.")
 #END
     await log(1, "WINNERS: {}".format(winners))
 
@@ -3408,6 +3407,9 @@ async def end_game(reason, winners=None):
         parameters = ' '.join(faftergame.content.split(' ')[2:])
         await commands[command][0](faftergame, parameters)
         faftergame = None
+#EXTENSION[DEATH]
+    await send_lobby("...Done! You may now use !join to start a new game.")
+#END
 
 def win_condition():
     teams = {'village' : 0, 'wolf' : 0, 'neutral' : 0}
