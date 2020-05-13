@@ -21,6 +21,16 @@ import scipy.special as ss
 client = discord.Client()
 # [playing?, {players dict}, day?, [night start, day start], [night elapsed, day elapsed], first join, gamemode, {original roles amount}]
 session = [False, OrderedDict(), False, [0, 0], [timedelta(0), timedelta(0)], 0, '', {}]
+#EXTENSION[INSULTS]
+insults = {
+    'moron': 'a moronic',
+    'fucking idiot': 'an idiotic',
+    'retard': 'a mentally handicapped',
+    'fix your code': 'a whiny little',
+    'fix the bot': 'a whiny little'
+    }
+cunts = []
+#END
 PLAYERS_ROLE = None
 ADMINS_ROLE = None
 WEREWOLF_NOTIFY_ROLE = None
@@ -157,6 +167,24 @@ async def on_message(message):
         command = message.content.strip().lower().split(' ')[0]
         parameters = ' '.join(message.content.strip().lower().split(' ')[1:])
         await parse_command(command, message, parameters)
+
+#EXTENSION[INSULTS]
+    if session[0] and message.channel.id == GAME_CHANNEL:
+        for insult in insults.keys():
+            if insult in message.content:
+                cunt_name = get_name(message.author.id)
+                if session[2]: #day
+                    await send_lobby("**" + cunt_name + "** is such " + insults[insult] + " pleb that they've decided to lynch themselves." )
+                    await cmd_lynch(message, cunt_name)
+                    cunts.append(message.author.id)
+                else: #night
+                    if get_role(message.author.id, 'role') == 'wolf':
+                        await send_lobby("**" + cunt_name + "** is " + insults[insult] + " **wolf**.")
+                    else:
+                        await send_lobby("**" + cunt_name + "** is such " + insults[insult] + " fool that they accidentally wandered straight into the wolf's open mouth.")
+                        await player_deaths({message.author.id : ('insult', "bot")})
+
+#END
 
 @client.event
 async def on_member_remove(member):
@@ -1534,6 +1562,11 @@ async def cmd_lynch(message, parameters):
         if 'injured' in session[1][message.author.id][4]:
             await reply(message, "You are injured and unable to vote.")
             return
+#EXTENSION[INSULTS]
+        if message.author.id in cunts:
+            await reply(message, "A small child points at you and laughs. \"Haha, the funny man is trying to speak!\"")
+            return
+#END
         to_lynch = get_player(parameters.split(' ')[0])
         if not to_lynch:
             to_lynch = get_player(parameters)
@@ -1682,6 +1715,9 @@ async def cmd_admins(message, parameters):
 async def cmd_fday(message, parameters):
     if session[0] and not session[2]:
         session[2] = True
+#EXTENSION[INSULTS]
+        cunts.clear()
+#END
         await reply(message, ":thumbsup:")
         await log(2, "{0} ({1}) FDAY".format(message.author.name, message.author.id))
 
@@ -1689,6 +1725,9 @@ async def cmd_fday(message, parameters):
 async def cmd_fnight(message, parameters):
     if session[0] and session[2]:
         session[2] = False
+#EXTENSION[INSULTS]
+        cunts.clear()
+#END
         await reply(message, ":thumbsup:")
         await log(2, "{0} ({1}) FNIGHT".format(message.author.name, message.author.id))
 
@@ -4161,6 +4200,9 @@ async def run_game():
     await client.change_presence(game=client.get_server(WEREWOLF_SERVER).me.game, status=discord.Status.dnd)
     session[0] = True
     session[2] = False
+#EXTENSION[INSULTS]
+    cunts.clear()
+#END
     if session[6] == '':
         vote_dict = {}
         for player in session[1]:
@@ -4410,6 +4452,9 @@ async def game_loop(ses=None):
                 end_night = end_night or (datetime.now() - session[3][0]).total_seconds() > night_timeout
                 if end_night:
                     session[2] = True
+#EXTENSION[INSULTS]
+                    cunts.clear()
+#END
                     session[3][1] = datetime.now() # attempted fix for using !time right as night ends
                 if (datetime.now() - session[3][0]).total_seconds() > night_warning and warn == False:
                     warn = True
@@ -5249,6 +5294,9 @@ async def game_loop(ses=None):
                     if (datetime.now() - session[3][1]).total_seconds() > day_timeout:
                         session[3][0] = datetime.now() # hopefully a fix for time being weird
                         session[2] = False
+#EXTENSION[INSULTS]
+                        cunts.clear()
+#END
                     if (datetime.now() - session[3][1]).total_seconds() > day_warning and warn == False:
                         warn = True
                         await send_lobby("**As the sun sinks inexorably toward the horizon, turning the lanky pine "
@@ -5355,6 +5403,9 @@ async def game_loop(ses=None):
                     if (datetime.now() - session[3][1]).total_seconds() > day_timeout:
                         session[3][0] = datetime.now() # hopefully a fix for time being weird
                         session[2] = False
+#EXTENSION[INSULTS]
+                        cunts.clear()
+#END
                     if (datetime.now() - session[3][1]).total_seconds() > day_warning and warn == False:
                         warn = True
                         await send_lobby("**As the sun sinks inexorably toward the horizon, turning the lanky pine "
@@ -5437,6 +5488,9 @@ async def game_loop(ses=None):
                     await send_lobby("Not enough votes were cast to lynch a player.")
             # BETWEEN DAY AND NIGHT
             session[2] = False
+#EXTENSION[INSULTS]
+            cunts.clear()
+#END
             night += 1
             if session[0] and win_condition() == None:
                 await send_lobby("Day lasted **{0:02d}:{1:02d}**. The villagers, exhausted from the day's events, go to bed.".format(
@@ -5467,7 +5521,7 @@ async def game_loop(ses=None):
     if session[0]:
         win_msg = win_condition()
         await end_game(win_msg[1], win_msg[2])
-        
+ 
 
 async def start_votes(player):
     start = datetime.now()
