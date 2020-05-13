@@ -929,7 +929,7 @@ async def cmd_stats(message, parameters):
         reply_msg += "\n**" + str(len(session[1])) + "** players playing: **" + str(len([x for x in session[1] if session[1][x][0]])) + "** alive, "
         reply_msg += "**" + str(len([x for x in session[1] if not session[1][x][0]])) + "** dead\n"
 #CHANGE[STATS]
-        reply_msg += "```basic\nLiving players:\n" + "\n".join(get_name(x) for x in session[1] if session[1][x][0]) + '\n'
+        reply_msg += "```basic\nLiving players:\n" + "\n".join(get_name(x) for x in session[1] if session[1][x][0]) + '\n\n'
         reply_msg += "Dead players:\n" + "\n".join(get_name(x) for x in session[1] if not session[1][x][0]) + '\n'
 #END
 
