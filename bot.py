@@ -921,8 +921,10 @@ async def cmd_stats(message, parameters):
             'roles' if session[6].startswith('roles') else session[6])
         reply_msg += "\n**" + str(len(session[1])) + "** players playing: **" + str(len([x for x in session[1] if session[1][x][0]])) + "** alive, "
         reply_msg += "**" + str(len([x for x in session[1] if not session[1][x][0]])) + "** dead\n"
-        reply_msg += "```basic\nLiving players:\n" + "\n".join(get_name(x) + ' (' + x + ')' for x in session[1] if session[1][x][0]) + '\n'
-        reply_msg += "Dead players:\n" + "\n".join(get_name(x) + ' (' + x + ')' for x in session[1] if not session[1][x][0]) + '\n'
+#CHANGE[STATS]
+        reply_msg += "```basic\nLiving players:\n" + "\n".join(get_name(x) for x in session[1] if session[1][x][0]) + '\n'
+        reply_msg += "Dead players:\n" + "\n".join(get_name(x) for x in session[1] if not session[1][x][0]) + '\n'
+#END
 
         if session[6] in ('random',):
             reply_msg += '\n!stats is disabled for the {} gamemode.```'.format(session[6])
