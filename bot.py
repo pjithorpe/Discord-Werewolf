@@ -653,8 +653,15 @@ async def cmd_role(message, parameters):
             await reply(message, msg)
             return
 
-        game_roles = dict(session[7])
-
+#CHANGE[ROLE]
+        game_roles = {}
+        for player in session[1]:
+            role = get_role(player, 'role')
+            if not role in game_roles:
+                game_roles[role] = 1
+            else:
+                game_roles[role] += 1
+#END
         msg += '\n'.join(["{}: {}".format(x, game_roles[x]) for x in sort_roles(game_roles)])
         msg += '```'
         await reply(message, msg)
