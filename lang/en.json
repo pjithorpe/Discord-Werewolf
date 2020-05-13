@@ -119,7 +119,30 @@
 			"Les peasants electent mortir les meilleur personne Francais **{0}**. Il etait un **{1}**.",
 			"The angry crowd has forced **{0}** to change his disseration topic to 'References and Accounts of Chlamydia in Medieval France'. This **{1}** might as well be considered dead!",
 			"As the villagers are about to slit **{1}** **{0}**'s throat, Aurelien Rougerie appears out of nowhere and expertly convinces the crowd to let him personally carry out the execution by snoo snoo!"
-		]
+		],
+		"285548234472947713": [ 
+			"Truly the greatest fears of the 1% have been fulfilled. The poor and destitute villagers have murdered Lord **{0}**, a **{1}**.",
+			"The angry mob has forced **{0}** to join the Saracens family legal team. After several long hours of a tedious legal scoping exercise with Nigel Wray, this **{1}** is found dead.",
+			"The village has forced **{0}** to go on a neverending pub crawl with Alex Goode. It is expected that this **{1}** will die of liver failure within the next few days.",
+			"In a streak of irony, the angry mob make **{0}** drink a concoction of every chemical compound mentioned in his PhD Thesis. After many agonising hours of screaming and pain, this **{1}** dies!"
+		 ],
+		 "117523275571003393": [ 
+			"The ignorant peasants of the village have voted to lynch **{0}**. Despite his rational and calm attempts to reason with the mob, this **{1}** is savagely cut down.",
+			"The villagers have voted to guillotine **{0}**. After he's beheaded, a quick inspection of the body reveals that he is actually not a ghost but a **{1}**.",
+			"The mob vote to re-enact their favourite Pro D2 red card highlights on **{0}**. After multiple punches and heavy blows to the head, this **{1}** dies!",
+			"In a particular francophobic turn of events, the angry villagers beat **{0}** to death with several stale baguettes. A quick search of the body, reveals that he was a **{1}**.",
+			"After the group votes to murder **{0}**, a **{1}**, it is revealed that 'le fantom' is actually nothing more than a figment of their collective madness as he fades from their memories.",
+			"The crowd has voted to sentence **{0}** to death. This is carried out by signing this **{1}** up to Racing 92's fanclub. As we know this is a fate worse than death."
+		 ],
+		 "252394382425194496": [ 
+			"The angry mob has lynched **{0}**, a **{1}**. In a vicious streak of sectarian irony, he's forced to march around the village 1690 times until he dies of exhaustion!",
+			"The irate crowd has voted to lynch **{0}**. After several powerful blows with a sledgehammer to the body, this **{1}** dies!",
+			"The village has decided to throw **{0}** into the village nuclear reactor core. After several strong pulses of radiation, this **{1}** ceases to exist in the form that we all remember and love.",
+			"The group ties **{0}** to the communal nuclear submarine which is ordered to dive to the crushing depths of the continential shelf. Several hours later, the body of this **{1}** washes up on the shore.",
+			"The villagers have forced **{0}** to join the Flags and Parades Commission in Northern Ireland. Surely for this **{1}**, this is a fate worse than death!",
+			"The peasants vote to re-enact the Stephen Ferris' biggest hits montage from Youtube on **{0}**. After several powerful blows to the body and head, this **{1}** dies!",
+			"The villagers have voted to lynch **{0}**, a **{1}**. He's fired out of a cannon called \"Roaring Meg\" from the village museum, used in the Siege of Derry or Londonderry."
+		 ]
 	},
 	"hastotem": [
 		"**{0}** is in possession of a mysterious totem..."
