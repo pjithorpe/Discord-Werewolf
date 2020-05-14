@@ -180,10 +180,9 @@ async def on_message(message):
                 else:
                     try:
                         await client.delete_message(message)
-                        await reply(message, "Waaaaaaaa! 👶😭<a:salty:710294969587335168>")
+                        await reply(message, "Waaaaaaaa! 👶😭<a:salty:710294892345294848>")
                     except:
                         await client.add_reaction(message, "🧂")
-
 #END
 
 @client.event
@@ -1550,7 +1549,9 @@ async def cmd_vote(message, parameters):
             else:
                 await reply(message, "You cannot vote for a gamemode if you are not playing!")
 
-@cmd('lynch', [0, 0], "```\n{0}lynch [<player>]\n\nVotes to lynch [<player>] during the day. If no arguments are given, replies with a list of current votes.```")
+#EXTENSION[LYNCHPHRASE]
+@cmd('lynch', [0, 0], "```\n{0}lynch [<player>]\n\nVotes to lynch [<player>] during the day. If no arguments are given, replies with a list of current votes.```", 'wilko', 'sarries', 'sbw')
+#END
 async def cmd_lynch(message, parameters):
     if not session[0] or not session[2]:
         return
@@ -1584,7 +1585,18 @@ async def cmd_lynch(message, parameters):
                 await reply(message, "Player **" + get_name(to_lynch) + "** is dead!")
             else:
                 session[1][message.author.id][2] = to_lynch
-                await reply(message, "You have voted to lynch **" + get_name(to_lynch) + "**.")
+#EXTENSION[LYNCHPHRASE]
+                lynch_phrase = ""
+                if 'wilko' in message.content:
+                    lynch_phrase = "drop kick"
+                elif 'sarries' in message.content:
+                    lynch_phrase = "relegate"
+                elif 'sbw' in message.content:
+                    lynch_phrase = "shoulder charge"
+                else:
+                    lynch_phrase = "lynch"
+                await reply(message, "You have voted to "+ lynch_phrase +" **" + get_name(to_lynch) + "**.")
+#END
                 vote_list = list(chain.from_iterable([[int(i.split(':')[1]) for i in session[1][x][4] if i.startswith("vote:")] for x in session[1]]))
                 if len(vote_list) == 0:
                     session[1][message.author.id][4].append("vote:1")
@@ -4287,6 +4299,9 @@ async def run_game():
 
     for stasised in [x for x in stasis if stasis[x] > 0]:
         stasis[stasised] -= 1
+#EXTENSION[INSULTS]
+    cunts.clear()
+#END
     await send_lobby("<@{}>, Welcome to Werewolf, the popular detective/social party game (a theme of Mafia). "
                               "Using the **{}** game mode with **{}** players.\nAll players check for PMs from me for instructions. "
                               "If you did not receive a pm, please let {} know.".format('> <@'.join(sort_players(session[1])),
