@@ -144,6 +144,16 @@
 			"The villagers have voted to lynch **{0}**, a **{1}**. He's fired out of a cannon called \"Roaring Meg\" from the village museum, used in the Siege of Derry or Londonderry."
 		 ]
 	},
+	"insults": {
+		"moron": "a moronic",
+		"fucking idiot": "an idiotic",
+		"retard": "a mentally handicapped",
+		"fix your code": "a whiny little",
+		"fix the bot": "a whiny little",
+		"fucking stupid": "a stupid",
+		"twat": "a twattish",
+		"fucking dumb": "an incredibly dumb"
+	},
 	"hastotem": [
 		"**{0}** is in possession of a mysterious totem..."
 	],

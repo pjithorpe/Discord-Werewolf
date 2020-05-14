@@ -22,13 +22,6 @@ client = discord.Client()
 # [playing?, {players dict}, day?, [night start, day start], [night elapsed, day elapsed], first join, gamemode, {original roles amount}]
 session = [False, OrderedDict(), False, [0, 0], [timedelta(0), timedelta(0)], 0, '', {}]
 #EXTENSION[INSULTS]
-insults = {
-    'moron': 'a moronic',
-    'fucking idiot': 'an idiotic',
-    'retard': 'a mentally handicapped',
-    'fix your code': 'a whiny little',
-    'fix the bot': 'a whiny little'
-    }
 cunts = []
 #END
 PLAYERS_ROLE = None
@@ -169,20 +162,27 @@ async def on_message(message):
         await parse_command(command, message, parameters)
 
 #EXTENSION[INSULTS]
-    if session[0] and message.channel.id == GAME_CHANNEL:
-        for insult in insults.keys():
+    if message.channel.id == GAME_CHANNEL:
+        for insult in lang['insults'].keys():
             if insult in message.content:
-                cunt_name = get_name(message.author.id)
-                if session[2]: #day
-                    await send_lobby("**" + cunt_name + "** is such " + insults[insult] + " pleb that they've decided to lynch themselves." )
-                    await cmd_lynch(message, cunt_name)
-                    cunts.append(message.author.id)
-                else: #night
-                    if get_role(message.author.id, 'role') == 'wolf':
-                        await send_lobby("**" + cunt_name + "** is " + insults[insult] + " **wolf**.")
-                    else:
-                        await send_lobby("**" + cunt_name + "** is such " + insults[insult] + " fool that they accidentally wandered straight into the wolf's open mouth.")
-                        await player_deaths({message.author.id : ('insult', "bot")})
+                if session[0]:
+                    cunt_name = get_name(message.author.id)
+                    if session[2]: #day
+                        await send_lobby("**" + cunt_name + "** is such " + lang['insults'][insult] + " pleb that they've decided to lynch themselves." )
+                        await cmd_lynch(message, cunt_name)
+                        cunts.append(message.author.id)
+                    else: #night
+                        if get_role(message.author.id, 'role') == 'wolf':
+                            await send_lobby("**" + cunt_name + "** is " + lang['insults'][insult] + " **wolf**.")
+                        else:
+                            await send_lobby("**" + cunt_name + "** is such " + lang['insults'][insult] + " fool that they accidentally wandered straight into the wolf's open mouth.")
+                            await player_deaths({message.author.id : ('insult', "bot")})
+                else:
+                    try:
+                        await client.delete_message(message)
+                        await reply(message, "Waaaaaaaa! 👶😭<a:salty:710294969587335168>")
+                    except:
+                        await client.add_reaction(message, "🧂")
 
 #END
 
@@ -1635,8 +1635,8 @@ async def cmd_votes(message, parameters):
         else:
             reply_msg += "Current votes: ```\n"
             for voted in [x for x in vote_dict if x != 'abstain']:
-                reply_msg += "{} ({}) ({} vote{}): {}\n".format(
-                    get_name(voted), voted, len(vote_dict[voted]), '' if len(vote_dict[voted]) == 1 else 's', ', '.join(['{} ({})'.format(get_name(x), x) for x in vote_dict[voted]]))
+                reply_msg += "{} ({} vote{}): {}\n".format(
+                    get_name(voted), len(vote_dict[voted]), '' if len(vote_dict[voted]) == 1 else 's', ', '.join([get_name(x) for x in vote_dict[voted]]))
             reply_msg += "{} vote{} to abstain: {}\n".format(
                 len(vote_dict['abstain']), '' if len(vote_dict['abstain']) == 1 else 's', ', '.join(['{} ({})'.format(get_name(x), x) for x in vote_dict['abstain']]))
             reply_msg += "```"
