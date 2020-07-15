@@ -162,27 +162,27 @@ async def on_message(message):
         await parse_command(command, message, parameters)
 
 #EXTENSION[INSULTS]
-    if message.channel.id == GAME_CHANNEL:
-        for insult in lang['insults'].keys():
-            if insult in message.content:
-                if session[0]:
-                    cunt_name = get_name(message.author.id)
-                    if session[2]: #day
-                        await send_lobby("**" + cunt_name + "** is such " + lang['insults'][insult] + " pleb that they've decided to lynch themselves." )
-                        await cmd_lynch(message, cunt_name)
-                        cunts.append(message.author.id)
-                    else: #night
-                        if get_role(message.author.id, 'role') == 'wolf':
-                            await send_lobby("**" + cunt_name + "** is " + lang['insults'][insult] + " **wolf**.")
-                        else:
-                            await send_lobby("**" + cunt_name + "** is such " + lang['insults'][insult] + " fool that they accidentally wandered straight into the wolf's open mouth.")
-                            await player_deaths({message.author.id : ('insult', "bot")})
-                else:
-                    try:
-                        await client.delete_message(message)
-                        await reply(message, "Waaaaaaaa! 👶😭<a:salty:710294892345294848>")
-                    except:
-                        await client.add_reaction(message, "🧂")
+    #if message.channel.id == GAME_CHANNEL:
+    for insult in lang['insults'].keys():
+        if insult in message.content.lower():
+            if session[0]:
+                cunt_name = get_name(message.author.id)
+                if session[2]: #day
+                    await send_lobby("**" + cunt_name + "** is such " + lang['insults'][insult] + " pleb that they've decided to lynch themselves." )
+                    await cmd_lynch(message, cunt_name)
+                    cunts.append(message.author.id)
+                else: #night
+                    if get_role(message.author.id, 'role') == 'wolf':
+                        await send_lobby("**" + cunt_name + "** is " + lang['insults'][insult] + " **wolf**.")
+                    else:
+                        await send_lobby("**" + cunt_name + "** is such " + lang['insults'][insult] + " fool that they accidentally wandered straight into the wolf's open mouth.")
+                        await player_deaths({message.author.id : ('insult', "bot")})
+            else:
+                try:
+                    await client.delete_message(message)
+                    await reply(message, "Waaaaaaaa! 👶😭<a:salty:710294892345294848>")
+                except:
+                    await client.add_reaction(message, "🧂")
 #END
 
 @client.event
